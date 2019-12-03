@@ -1,18 +1,40 @@
 defmodule D02 do
   def run() do
-    {:ok, file} =
-      Path.join(__ENV__.file, "../../input")
-      |> Path.expand()
-      |> File.read()
+    Path.join(__ENV__.file, "../../input")
+    |> Path.expand()
+    |> load_program()
+    |> List.replace_at(1, 12)
+    |> List.replace_at(2, 2)
+    |> solve()
+    |> Enum.at(0)
+  end
+
+  def find_19690720() do
+    for noun <- Range.new(0, 100),
+        verb <- Range.new(0, 100) do
+      result =
+        Path.join(__ENV__.file, "../../input")
+        |> Path.expand()
+        |> load_program()
+        |> List.replace_at(1, noun)
+        |> List.replace_at(2, verb)
+        |> solve()
+        |> Enum.at(0)
+
+      case result do
+        19_690_720 -> IO.puts("100 * #{noun} + #{verb} = #{100 * noun + verb}")
+        _ -> nil
+      end
+    end
+  end
+
+  defp load_program(file) do
+    {:ok, file} = File.read(file)
 
     file
     |> String.trim()
     |> String.split(",")
     |> Enum.map(&String.to_integer/1)
-    |> List.replace_at(1, 12)
-    |> List.replace_at(2, 2)
-    |> solve()
-    |> Enum.at(0)
   end
 
   def solve(program) do
