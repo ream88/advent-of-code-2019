@@ -12,7 +12,12 @@ defmodule D01 do
     |> Enum.sum()
   end
 
-  def fuel(mass) do
-    trunc(:math.floor(mass / 3) - 2)
+  def fuel(mass) when mass > 0 do
+    fuel = trunc(:math.floor(mass / 3) - 2)
+    fuel_mass = abs(fuel(fuel))
+
+    fuel + fuel_mass
   end
+
+  def fuel(mass), do: mass
 end
