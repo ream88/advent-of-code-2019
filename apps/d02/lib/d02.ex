@@ -21,21 +21,21 @@ defmodule D02 do
 
   defp solve_helper(program, memory, 0) when length(program) == 0, do: memory
 
-  defp solve_helper(program, memory, index) do
+  defp solve_helper(program, memory, pointer) do
     case program do
       [1, x, y, z | _] ->
         memory = List.replace_at(memory, z, Enum.at(memory, x) + Enum.at(memory, y))
 
         memory
-        |> Enum.drop(index + 4)
-        |> solve_helper(memory, index + 4)
+        |> Enum.drop(pointer + 4)
+        |> solve_helper(memory, pointer + 4)
 
       [2, x, y, z | _] ->
         memory = List.replace_at(memory, z, Enum.at(memory, x) * Enum.at(memory, y))
 
         memory
-        |> Enum.drop(index + 4)
-        |> solve_helper(memory, index + 4)
+        |> Enum.drop(pointer + 4)
+        |> solve_helper(memory, pointer + 4)
 
       [99 | _] ->
         memory
