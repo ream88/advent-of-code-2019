@@ -1,5 +1,5 @@
 defmodule D02 do
-  def run() do
+  def part1() do
     Path.join(__ENV__.file, "../../input")
     |> Path.expand()
     |> load_program()
@@ -7,9 +7,10 @@ defmodule D02 do
     |> List.replace_at(2, 2)
     |> solve()
     |> Enum.at(0)
+    |> IO.inspect(label: "Part 1")
   end
 
-  def find_19690720() do
+  def part2() do
     for noun <- Range.new(0, 100),
         verb <- Range.new(0, 100) do
       result =
@@ -22,8 +23,12 @@ defmodule D02 do
         |> Enum.at(0)
 
       case result do
-        19_690_720 -> IO.puts("100 * #{noun} + #{verb} = #{100 * noun + verb}")
-        _ -> nil
+        19_690_720 ->
+          IO.puts("Part 2: 100 * #{noun} + #{verb} = #{100 * noun + verb}")
+          Kernel.exit(:normal)
+
+        _ ->
+          nil
       end
     end
   end
