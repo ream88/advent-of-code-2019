@@ -12,6 +12,19 @@ defmodule D04 do
     |> IO.inspect(label: "Passwords matching criteria")
   end
 
+  def part2() do
+    input = 183_564..657_474
+
+    100_000..999_999
+    |> Enum.count(fn password ->
+      six_digit?(password) &&
+        in_range?(password, input) &&
+        two_adjacent?(password) &&
+        increase?(password)
+    end)
+    |> IO.inspect(label: "Passwords matching criteria")
+  end
+
   @doc """
   Checks whether the password is 6 digits long.
 
@@ -35,7 +48,7 @@ defmodule D04 do
   def in_range?(password, range), do: password in range
 
   @doc """
-  Checks whether the password has same two adjacent digits.
+  Checks whether the password has same adjacent digits.
 
     iex> D04.adjacent?(111111)
     true
@@ -47,13 +60,10 @@ defmodule D04 do
     false
   """
   def adjacent?(password) do
-    digits = Integer.digits(password)
-
-    digits
-    |> Enum.with_index()
-    |> Enum.any?(fn {digit, index} ->
-      Enum.at(digits, index + 1) == digit
-    end)
+    password
+    |> Integer.digits()
+    |> Enum.chunk_by(& &1)
+    |> Enum.any?(&(length(&1) >= 2))
   end
 
   @doc """
@@ -79,5 +89,24 @@ defmodule D04 do
         next -> digit <= next
       end
     end)
+  end
+
+  @doc """
+  Checks whether the password has same adjacent digits.
+
+    iex> D04.two_adjacent?(112233)
+    true
+
+    iex> D04.two_adjacent?(123444)
+    false
+
+    iex> D04.two_adjacent?(111122)
+    true
+  """
+  def two_adjacent?(password) do
+    password
+    |> Integer.digits()
+    |> Enum.chunk_by(& &1)
+    |> Enum.any?(&(length(&1) == 2))
   end
 end
