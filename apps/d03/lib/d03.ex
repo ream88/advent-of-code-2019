@@ -1,5 +1,21 @@
 defmodule D03 do
   def part1() do
+    [wire1, wire2] = load_wires()
+
+    intersections(wire1, wire2)
+    |> shortest_distance()
+    |> IO.inspect(label: "Shortest distance")
+  end
+
+  def part2() do
+    [wire1, wire2] = load_wires()
+
+    intersections(wire1, wire2)
+    |> quickest_distance(wire1, wire2)
+    |> IO.inspect(label: "Quickest distance")
+  end
+
+  defp load_wires() do
     {:ok, file} =
       Path.join(__ENV__.file, "../../input")
       |> Path.expand()
@@ -10,9 +26,7 @@ defmodule D03 do
     wire1 = move([{0, 0}], wire1)
     wire2 = move([{0, 0}], wire2)
 
-    intersections(wire1, wire2)
-    |> shortest_distance()
-    |> IO.inspect(label: "Shortest distance")
+    [wire1, wire2]
   end
 
   def intersections(wire1, wire2) do
@@ -25,6 +39,16 @@ defmodule D03 do
     points
     |> Enum.map(fn {x, y} -> abs(x) + abs(y) end)
     |> Enum.min()
+  end
+
+  def quickest_distance(points, wire1, wire2) do
+    points
+    |> Enum.map(fn point -> quickest_path(wire1, point) + quickest_path(wire2, point) end)
+    |> Enum.min()
+  end
+
+  defp quickest_path(wire, point) do
+    Enum.find_index(wire, &(&1 == point))
   end
 
   def move(panel, instructions) when is_binary(instructions) do
